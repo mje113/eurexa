@@ -126,7 +126,7 @@ defmodule Eurexa.EurexaServer do
 	  leaseInfo: %{evictionDurationInSecs: 30},
 	  metadata: %{}
 
-	use GenServer
+  use GenServer
   require Logger
 
 	@doc """
@@ -137,12 +137,17 @@ defmodule Eurexa.EurexaServer do
 	end
 
 	def init([app_name]) do
-		app = %__MODULE__{app: app_name, status: :UP}
     conf = Application.get_env(:eurexa, app_name)
-    server = conf[:eureka_server]
-    port = conf[:eureka_port]
-    prefix = conf[:eureka_prefix]
-    version= conf[:eureka_version]
+
+		app = %__MODULE__{app: app_name, status: :UP,
+      hostName: conf[:app][:hostname],
+      port: conf[:app][:port]
+    }
+
+    server  = conf[:eureka_server]
+    port    = conf[:eureka_port]
+    prefix  = conf[:eureka_prefix]
+    version = conf[:eureka_version]
 
     mod = case version do
       1 -> Eurexa.EurekaV1

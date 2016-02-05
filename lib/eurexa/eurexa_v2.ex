@@ -5,7 +5,7 @@ defmodule Eurexa.EurekaV2 do
 	"""
 
 	alias Eurexa.EurexaServer
-	@eureka_api "eureka/apps" # in Eureka Spring the v2 is eliminated
+	@eureka_api "eureka/v2/apps" # in Eureka Spring the v2 is eliminated
 
 	@behaviour Eurexa.EurekaBehaviour
 
@@ -23,8 +23,10 @@ defmodule Eurexa.EurekaV2 do
     json = EurexaServer.make_instance_data(app)
     json = "{\"instance\":#{json}}"
     |> IO.inspect
+
     header = [{"content-type", "application/json"}]
 		make_url(eureka_base_url, app.app)
+    |> IO.inspect
     |> HTTPoison.post(json, header)
 	end
 
